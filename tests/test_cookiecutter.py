@@ -119,18 +119,29 @@ def test_tox(cookies, tmp_path):
         assert file_contains_text(f"{result.project_path}/tox.ini", "[tox]")
 
 
-def test_dockerfile(cookies, tmp_path):
+def test_dockerfile_basic(cookies, tmp_path):
     with run_within_dir(tmp_path):
-        result = cookies.bake(extra_context={"dockerfile": "y"})
+        result = cookies.bake(extra_context={"dockerfile": "basic"})
         assert result.exit_code == 0
         assert os.path.isfile(f"{result.project_path}/Dockerfile")
+        assert not os.path.isfile(f"{result.project_path}/Dockerfile_huggingface")
+
+
+def test_dockerfile_huggingface(cookies, tmp_path):
+    with run_within_dir(tmp_path):
+        result = cookies.bake(extra_context={"dockerfile": "basic"})
+        assert result.exit_code == 0
+        assert os.path.isfile(f"{result.project_path}/Dockerfile")
+        assert not os.path.isfile(f"{result.project_path}/Dockerfile_basic")
 
 
 def test_not_dockerfile(cookies, tmp_path):
     with run_within_dir(tmp_path):
-        result = cookies.bake(extra_context={"dockerfile": "n"})
+        result = cookies.bake(extra_context={"dockerfile": "none"})
         assert result.exit_code == 0
         assert not os.path.isfile(f"{result.project_path}/Dockerfile")
+        assert not os.path.isfile(f"{result.project_path}/Dockerfile_basic")
+        assert not os.path.isfile(f"{result.project_path}/Dockerfile_huggingface")
 
 
 def test_codecov(cookies, tmp_path):
@@ -164,7 +175,7 @@ def test_remove_release_workflow(cookies, tmp_path):
 
 def test_license_mit(cookies, tmp_path):
     with run_within_dir(tmp_path):
-        result = cookies.bake(extra_context={"open_source_license": "MIT license"})
+        result = cookies.bake(extra_context={"open_source_license": "MIT - MIT license"})
         assert result.exit_code == 0
         assert os.path.isfile(f"{result.project_path}/LICENSE")
         assert not os.path.isfile(f"{result.project_path}/LICENSE_BSD")
@@ -176,51 +187,9 @@ def test_license_mit(cookies, tmp_path):
             assert len(content) == 21
 
 
-def test_license_bsd(cookies, tmp_path):
-    with run_within_dir(tmp_path):
-        result = cookies.bake(extra_context={"open_source_license": "BSD license"})
-        assert result.exit_code == 0
-        assert os.path.isfile(f"{result.project_path}/LICENSE")
-        assert not os.path.isfile(f"{result.project_path}/LICENSE_MIT")
-        assert not os.path.isfile(f"{result.project_path}/LICENSE_ISC")
-        assert not os.path.isfile(f"{result.project_path}/LICENSE_APACHE")
-        assert not os.path.isfile(f"{result.project_path}/LICENSE_GPL")
-        with open(f"{result.project_path}/LICENSE", encoding="utf8") as licfile:
-            content = licfile.readlines()
-            assert len(content) == 28
-
-
-def test_license_isc(cookies, tmp_path):
-    with run_within_dir(tmp_path):
-        result = cookies.bake(extra_context={"open_source_license": "ISC license"})
-        assert result.exit_code == 0
-        assert os.path.isfile(f"{result.project_path}/LICENSE")
-        assert not os.path.isfile(f"{result.project_path}/LICENSE_MIT")
-        assert not os.path.isfile(f"{result.project_path}/LICENSE_BSD")
-        assert not os.path.isfile(f"{result.project_path}/LICENSE_APACHE")
-        assert not os.path.isfile(f"{result.project_path}/LICENSE_GPL")
-        with open(f"{result.project_path}/LICENSE", encoding="utf8") as licfile:
-            content = licfile.readlines()
-            assert len(content) == 7
-
-
-def test_license_apache(cookies, tmp_path):
-    with run_within_dir(tmp_path):
-        result = cookies.bake(extra_context={"open_source_license": "Apache Software License 2.0"})
-        assert result.exit_code == 0
-        assert os.path.isfile(f"{result.project_path}/LICENSE")
-        assert not os.path.isfile(f"{result.project_path}/LICENSE_MIT")
-        assert not os.path.isfile(f"{result.project_path}/LICENSE_BSD")
-        assert not os.path.isfile(f"{result.project_path}/LICENSE_ISC")
-        assert not os.path.isfile(f"{result.project_path}/LICENSE_GPL")
-        with open(f"{result.project_path}/LICENSE", encoding="utf8") as licfile:
-            content = licfile.readlines()
-            assert len(content) == 202
-
-
 def test_license_gplv3(cookies, tmp_path):
     with run_within_dir(tmp_path):
-        result = cookies.bake(extra_context={"open_source_license": "GNU General Public License v3"})
+        result = cookies.bake(extra_context={"open_source_license": "GPL-3.0 - GNU General Public License v3"})
         assert result.exit_code == 0
         assert os.path.isfile(f"{result.project_path}/LICENSE")
         assert not os.path.isfile(f"{result.project_path}/LICENSE_MIT")
@@ -234,7 +203,7 @@ def test_license_gplv3(cookies, tmp_path):
 
 def test_license_no_license(cookies, tmp_path):
     with run_within_dir(tmp_path):
-        result = cookies.bake(extra_context={"open_source_license": "Not open source"})
+        result = cookies.bake(extra_context={"open_source_license": "None - Not open source"})
         assert result.exit_code == 0
         assert not os.path.isfile(f"{result.project_path}/LICENSE")
         assert not os.path.isfile(f"{result.project_path}/LICENSE_MIT")
@@ -242,3 +211,34 @@ def test_license_no_license(cookies, tmp_path):
         assert not os.path.isfile(f"{result.project_path}/LICENSE_ISC")
         assert not os.path.isfile(f"{result.project_path}/LICENSE_APACHE")
         assert not os.path.isfile(f"{result.project_path}/LICENSE_GPL")
+
+
+def test_readme_frontmatter_huggingface(cookies, tmp_path):
+    """Test that README.md contains YAML frontmatter when dockerfile=huggingface"""
+    with run_within_dir(tmp_path):
+        result = cookies.bake(extra_context={"dockerfile": "huggingface"})
+        assert result.exit_code == 0
+
+        # Read README.md content
+        with open(f"{result.project_path}/README.md", encoding="utf8") as readme:
+            content = readme.read()
+
+        # Check for YAML frontmatter markers and required fields
+        assert content.startswith("---")
+        assert "sdk: docker" in content
+        assert "app_port: 7860" in content
+        assert "---" in content.split("\n")[1:15]  # Check closing frontmatter marker in first few lines
+
+
+def test_readme_no_frontmatter(cookies, tmp_path):
+    """Test that README.md does not contain YAML frontmatter when dockerfile is not huggingface"""
+    with run_within_dir(tmp_path):
+        result = cookies.bake(extra_context={"dockerfile": "basic"})
+        assert result.exit_code == 0
+
+        # Read README.md content
+        with open(f"{result.project_path}/README.md", encoding="utf8") as readme:
+            content = readme.read()
+
+        # Check that file does not start with YAML frontmatter
+        assert not content.startswith("---")

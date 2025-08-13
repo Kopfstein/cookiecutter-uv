@@ -1,4 +1,4 @@
-{% if cookiecutter.dockerfile == "huggingface" %}
+{%- if cookiecutter.dockerfile == "huggingface" -%}
 ---
 title: {{cookiecutter.project_name}}
 license: {{cookiecutter.open_source_license.split()[0].lower()}}
@@ -9,7 +9,7 @@ colorFrom: green
 colorTo: blue
 short_description: {{cookiecutter.project_description|truncate(60)}}
 ---
-{% endif %}
+{% endif -%}
 # {{cookiecutter.project_name}}
 
 [![Release](https://img.shields.io/github/v/release/{{cookiecutter.author_github_handle}}/{{cookiecutter.project_name}})](https://img.shields.io/github/v/release/{{cookiecutter.author_github_handle}}/{{cookiecutter.project_name}})
