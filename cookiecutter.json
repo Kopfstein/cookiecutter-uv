@@ -30,8 +30,9 @@
     "n"
   ],
   "dockerfile": [
-    "y",
-    "n"
+    "basic",
+    "huggingface",
+    "none"
   ],
   "devcontainer": [
     "y",
@@ -42,11 +43,8 @@
     "ty"
   ],
   "open_source_license": [
-    "MIT license",
-    "BSD license",
-    "ISC license",
-    "Apache Software License 2.0",
-    "GNU General Public License v3",
-    "Not open source"
+    "MIT - MIT license",
+    "GPL-3.0 - GNU General Public License v3",
+    "None - Not open source"
   ]
 }

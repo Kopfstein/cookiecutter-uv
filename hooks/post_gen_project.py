@@ -34,8 +34,19 @@ if __name__ == "__main__":
         remove_dir("docs")
         remove_file("mkdocs.yml")
 
-    if "{{cookiecutter.dockerfile}}" != "y":
-        remove_file("Dockerfile")
+    if "{{cookiecutter.dockerfile}}" == "basic":
+        move_file("Dockerfile_basic", "Dockerfile")
+        remove_file("Dockerfile_huggingface")
+        remove_file(os.path.join("{{cookiecutter.project_slug}}", "index.html"))
+    elif "{{cookiecutter.dockerfile}}" == "huggingface":
+        move_file("Dockerfile_huggingface", "Dockerfile")
+        remove_file("Dockerfile_basic")
+        remove_file(os.path.join("{{cookiecutter.project_slug}}", "__init__.py"))
+        remove_file(os.path.join("{{cookiecutter.project_slug}}", "foo.py"))
+    elif "{{cookiecutter.dockerfile}}" == "none":
+        remove_file("Dockerfile_basic")
+        remove_file("Dockerfile_huggingface")
+        remove_file(os.path.join("{{cookiecutter.project_slug}}", "index.html"))
 
     if "{{cookiecutter.codecov}}" != "y":
         remove_file("codecov.yaml")
@@ -45,47 +56,17 @@ if __name__ == "__main__":
     if "{{cookiecutter.devcontainer}}" != "y":
         remove_dir(".devcontainer")
 
-    if "{{cookiecutter.open_source_license}}" == "MIT license":
+    if "{{cookiecutter.open_source_license}}" == "MIT - MIT license":
         move_file("LICENSE_MIT", "LICENSE")
-        remove_file("LICENSE_BSD")
-        remove_file("LICENSE_ISC")
-        remove_file("LICENSE_APACHE")
         remove_file("LICENSE_GPL")
 
-    if "{{cookiecutter.open_source_license}}" == "BSD license":
-        move_file("LICENSE_BSD", "LICENSE")
-        remove_file("LICENSE_MIT")
-        remove_file("LICENSE_ISC")
-        remove_file("LICENSE_APACHE")
-        remove_file("LICENSE_GPL")
-
-    if "{{cookiecutter.open_source_license}}" == "ISC license":
-        move_file("LICENSE_ISC", "LICENSE")
-        remove_file("LICENSE_MIT")
-        remove_file("LICENSE_BSD")
-        remove_file("LICENSE_APACHE")
-        remove_file("LICENSE_GPL")
-
-    if "{{cookiecutter.open_source_license}}" == "Apache Software License 2.0":
-        move_file("LICENSE_APACHE", "LICENSE")
-        remove_file("LICENSE_MIT")
-        remove_file("LICENSE_BSD")
-        remove_file("LICENSE_ISC")
-        remove_file("LICENSE_GPL")
-
-    if "{{cookiecutter.open_source_license}}" == "GNU General Public License v3":
+    if "{{cookiecutter.open_source_license}}" == "GPL-3.0 - GNU General Public License v3":
         move_file("LICENSE_GPL", "LICENSE")
         remove_file("LICENSE_MIT")
-        remove_file("LICENSE_BSD")
-        remove_file("LICENSE_ISC")
-        remove_file("LICENSE_APACHE")
 
-    if "{{cookiecutter.open_source_license}}" == "Not open source":
+    if "{{cookiecutter.open_source_license}}" == "None - Not open source":
         remove_file("LICENSE_GPL")
         remove_file("LICENSE_MIT")
-        remove_file("LICENSE_BSD")
-        remove_file("LICENSE_ISC")
-        remove_file("LICENSE_APACHE")
 
     if "{{cookiecutter.layout}}" == "src":
         if os.path.isdir("src"):

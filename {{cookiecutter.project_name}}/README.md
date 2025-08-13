@@ -1,3 +1,13 @@
+---
+title: {{cookiecutter.project_name}}
+license: {{cookiecutter.open_source_license.split()[0].lower()}}
+sdk: docker
+app_port: 7860
+emoji: 🐠
+colorFrom: green
+colorTo: blue
+short_description: {{cookiecutter.project_description}}
+---
 # {{cookiecutter.project_name}}
 
 [![Release](https://img.shields.io/github/v/release/{{cookiecutter.author_github_handle}}/{{cookiecutter.project_name}})](https://img.shields.io/github/v/release/{{cookiecutter.author_github_handle}}/{{cookiecutter.project_name}})
