@@ -37,4 +37,4 @@ RUN uv sync --frozen
 
 # Expose the port and run the server
 EXPOSE 7860
-CMD ["uv", "run", "python", "-m", "http.server", "7860", "-d", "./example_project/"]
+CMD ["uv", "run", "python", "-m", "http.server", "7860", "-d", "./{{cookiecutter.project_slug}}/"]
