@@ -74,7 +74,9 @@ will be deployed to the `gh-pages` branch.
 
 **dockerfile**
 
-`"y"` or `"n"`. Adds a simple [Dockerfile](https://docker.com).
+Choose what type of [Dockerfile](https://docker.com) to add. Options:
+`"none"`, `"basic"` adds a simple [Dockerfile](https://docker.com), or
+`"huggingface"` adds a Dockerfile for [Huggingface Spaces](https://huggingface.co/docs/hub/spaces).
 
 **devcontainer**
 
@@ -83,6 +85,6 @@ will be deployed to the `gh-pages` branch.
 **open_source_license**
 
 Choose a [license](https://choosealicense.com/). Options:
-`["1. MIT License", "2. BSD license", "3. ISC license",  "4. Apache Software License 2.0", "5. GNU General Public License v3", "6. Not open source"]`
+`["1. MIT - MIT License", "2. GPL-3.0 - GNU General Public License v3", "3. Not open source"]`
 
 ---

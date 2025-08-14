@@ -9,7 +9,9 @@
 [![Docs](https://img.shields.io/badge/docs-gh--pages-blue)](https://fpgmaas.github.io/cookiecutter-uv/)
 [![License](https://img.shields.io/github/license/fpgmaas/cookiecutter-uv)](https://img.shields.io/github/license/fpgmaas/cookiecutter-uv)
 
-This is a modern Cookiecutter template that can be used to initiate a Python project with all the necessary tools for development, testing, and deployment. It supports the following features:
+This is a fork of the [cookiecutter uv](https://github.com/fpgmaas/cookiecutter-uv) template that can be used with the [cookiecutter](https://github.com/cookiecutter/cookiecutter) utility to initiate a Python project with all the necessary tools for development, testing, and deployment.
+
+cookiecutter-uv upports the following features:
 
 - [uv](https://docs.astral.sh/uv/) for dependency management
 - Supports both [src and flat layout](https://packaging.python.org/en/latest/discussions/src-layout-vs-flat-layout/).
@@ -22,6 +24,10 @@ This is a modern Cookiecutter template that can be used to initiate a Python pro
 - Compatibility testing for multiple versions of Python with [tox-uv](https://github.com/tox-dev/tox-uv)
 - Containerization with [Docker](https://www.docker.com/) or [Podman](https://podman.io/)
 - Development environment with [VSCode devcontainers](https://code.visualstudio.com/docs/devcontainers/containers)
+
+This fork adds following features:
+
+- Docker container for use at [Huggingface Spaces](https://huggingface.co/docs/hub/spaces)
 
 ---
 
